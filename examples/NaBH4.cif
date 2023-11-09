@@ -1,75 +1,50 @@
-
-#======================================================================
-# CRYSTAL DATA
-#----------------------------------------------------------------------
-data_VESTA_phase_1
-
-_chemical_name_common                  ' Sodium tetrahydridoborate'
-_cell_length_a                         6.145270
-_cell_length_b                         6.145270
-_cell_length_c                         6.145270
-_cell_angle_alpha                      90.000000
-_cell_angle_beta                       90.000000
-_cell_angle_gamma                      90.000000
-_cell_volume                           232.072072
-_space_group_name_H-M_alt              'P 1'
-_space_group_IT_number                 1
-
+# generated using pymatgen
+data_NaBH4
+_symmetry_space_group_name_H-M   P4_2/nmc
+_cell_length_a   4.27632389
+_cell_length_b   4.27632389
+_cell_length_c   5.79882743
+_cell_angle_alpha   90.00000000
+_cell_angle_beta   90.00000000
+_cell_angle_gamma   90.00000000
+_symmetry_Int_Tables_number   137
+_chemical_formula_structural   NaBH4
+_chemical_formula_sum   'Na2 B2 H8'
+_cell_volume   106.04284415
+_cell_formula_units_Z   2
 loop_
-_space_group_symop_operation_xyz
-   'x, y, z'
-
+ _symmetry_equiv_pos_site_id
+ _symmetry_equiv_pos_as_xyz
+  1  'x, y, z'
+  2  '-y+1/2, x+1/2, z+1/2'
+  3  '-x, -y, z'
+  4  'y+1/2, -x+1/2, z+1/2'
+  5  'x+1/2, -y+1/2, -z+1/2'
+  6  '-y, -x, -z'
+  7  '-x+1/2, y+1/2, -z+1/2'
+  8  'y, x, -z'
+  9  '-x+1/2, -y+1/2, -z+1/2'
+  10  'y, -x, -z'
+  11  'x+1/2, y+1/2, -z+1/2'
+  12  '-y, x, -z'
+  13  '-x, y, z'
+  14  'y+1/2, x+1/2, z+1/2'
+  15  'x, -y, z'
+  16  '-y+1/2, -x+1/2, z+1/2'
 loop_
-   _atom_site_label
-   _atom_site_occupancy
-   _atom_site_fract_x
-   _atom_site_fract_y
-   _atom_site_fract_z
-   _atom_site_adp_type
-   _atom_site_U_iso_or_equiv
-   _atom_site_type_symbol
-   Na         1.0     0.000000     0.000000     0.000000    Uiso  ? Na
-   Na         1.0     0.000000     0.000000     1.000000    Uiso  ? Na
-   Na         1.0     0.000000     1.000000     0.000000    Uiso  ? Na
-   Na         1.0     0.000000     1.000000     1.000000    Uiso  ? Na
-   Na         1.0     1.000000     0.000000     0.000000    Uiso  ? Na
-   Na         1.0     1.000000     0.000000     1.000000    Uiso  ? Na
-   Na         1.0     1.000000     1.000000     0.000000    Uiso  ? Na
-   Na         1.0     1.000000     1.000000     1.000000    Uiso  ? Na
-   Na         1.0     0.000000     0.500000     0.500000    Uiso  ? Na
-   Na         1.0     1.000000     0.500000     0.500000    Uiso  ? Na
-   Na         1.0     0.500000     0.000000     0.500000    Uiso  ? Na
-   Na         1.0     0.500000     1.000000     0.500000    Uiso  ? Na
-   Na         1.0     0.500000     0.500000     0.000000    Uiso  ? Na
-   Na         1.0     0.500000     0.500000     1.000000    Uiso  ? Na
-   B          1.0     0.500000     0.500000     0.500000    Uiso  ? B
-   B          1.0     0.500000     0.000000     0.000000    Uiso  ? B
-   B          1.0     0.500000     0.000000     1.000000    Uiso  ? B
-   B          1.0     0.500000     1.000000     0.000000    Uiso  ? B
-   B          1.0     0.500000     1.000000     1.000000    Uiso  ? B
-   B          1.0     0.000000     0.500000     0.000000    Uiso  ? B
-   B          1.0     0.000000     0.500000     1.000000    Uiso  ? B
-   B          1.0     1.000000     0.500000     0.000000    Uiso  ? B
-   B          1.0     1.000000     0.500000     1.000000    Uiso  ? B
-   B          1.0     0.000000     0.000000     0.500000    Uiso  ? B
-   B          1.0     0.000000     1.000000     0.500000    Uiso  ? B
-   B          1.0     1.000000     0.000000     0.500000    Uiso  ? B
-   B          1.0     1.000000     1.000000     0.500000    Uiso  ? B
-   H          1.0     0.609900     0.609900     0.609900    Uiso  ? H
-   H          1.0     0.390100     0.390100     0.609900    Uiso  ? H
-   H          1.0     0.390100     0.609900     0.390100    Uiso  ? H
-   H          1.0     0.609900     0.390100     0.390100    Uiso  ? H
-   H          1.0     0.609900     0.109900     0.109900    Uiso  ? H
-   H          1.0     0.390100     0.890100     0.109900    Uiso  ? H
-   H          1.0     0.390100     0.109900     0.890100    Uiso  ? H
-   H          1.0     0.609900     0.890100     0.890100    Uiso  ? H
-   H          1.0     0.109900     0.609900     0.109900    Uiso  ? H
-   H          1.0     0.890100     0.390100     0.109900    Uiso  ? H
-   H          1.0     0.890100     0.609900     0.890100    Uiso  ? H
-   H          1.0     0.109900     0.390100     0.890100    Uiso  ? H
-   H          1.0     0.109900     0.109900     0.609900    Uiso  ? H
-   H          1.0     0.890100     0.890100     0.609900    Uiso  ? H
-   H          1.0     0.890100     0.109900     0.390100    Uiso  ? H
-   H          1.0     0.109900     0.890100     0.390100    Uiso  ? H
-   H          1.0     0.609900    -0.109900    -0.109900    Uiso  ? H
-   H          1.0    -0.109900    -0.109900     0.609900    Uiso  ? H
+ _atom_type_symbol
+ _atom_type_oxidation_number
+  Na+  1.0
+  B3+  3.0
+  H-  -1.0
+loop_
+ _atom_site_type_symbol
+ _atom_site_label
+ _atom_site_symmetry_multiplicity
+ _atom_site_fract_x
+ _atom_site_fract_y
+ _atom_site_fract_z
+ _atom_site_occupancy
+  Na+  Na0  2  0.00000000  0.00000000  0.00000000  1
+  B3+  B1  2  0.00000000  0.00000000  0.50000000  1
+  H-  H2  8  0.00000000  0.23321254  0.37927869  1
