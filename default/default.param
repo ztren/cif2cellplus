@@ -1,0 +1,42 @@
+comment         = none
+continuation = default
+task : geometryoptimisation
+#task : magres
+#magres_task : NMR
+#task : bandstructure
+
+#relativistic_treatment : KOELLING-HARMON	#default for geometry optimisation, not used for NMR
+#relativistic_treatment : SCHROEDINGER
+#relativistic_treatment : ZORA
+#relativistic_treatment : DIRAC
+
+xc_functional : PBE
+fix_occupancy = FALSE
+opt_strategy : speed
+cut_off_energy  = 800 eV # change as need
+max_scf_cycles : 200
+metals_method : DM
+#num_proc_in_smp : 8
+
+#for SCF cycles (I think)
+ELEC_ENERGY_TOL	     : 0.00001	#10^-5 eV/atom for most TASK values, 10^-8 eV/atom if TASK=MAGRES, 10^-9 eV/atom if TASK=PHONON
+ELEC_FORCE_TOL	     : 0.005
+ELEC_CONVERGENCE_WIN : 3
+
+#for task : geometryoptimisation
+GEOM_ENERGY_TOL      : 0.00002
+GEOM_FORCE_TOL	     : 0.01		#0.05 default, 0.01 is better
+GEOM_MODULUS_EST     : 100 GPa
+GEOM_MAX_ITER        : 200
+
+#for task : magres
+MAGRES_METHOD		 : CRYSTAL	#MOLECULAR - applicable only for a "molecule in a box" supercell representation of a molecular system. For such a system, the Molecular option produces a noticeably faster calculation than the Crystal option.
+MAGRES_CONV_TOL      : 0.000000001
+
+#for task : bandstructure
+BS_MAX_ITER          : 10000
+BS_MAX_CG_STEPS      : 10000
+BS_EIGENVALUE_TOL    : 0.000000001
+
+#write_cell_structure = TRUE
+write_cif_structure = TRUE

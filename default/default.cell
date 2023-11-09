@@ -1,0 +1,8 @@
+
+kpoints_mp_spacing : 0.06
+
+#symmetry_generate : TRUE
+
+#FIX_ALL_CELL : TRUE
+FIX_ALL_CELL : FALSE
+
