@@ -12,14 +12,12 @@
 #SBATCH --export=ALL
 
 # Create new scratch directory and add a variable for the new directory name
-NEW_DIR="/expanse/lustre/scratch/${USER}/temp_project/castep/${SLURM_JOB_NAME}_${SLURM_JOB_ID}"
-DATA="/home/${USER}/project/${SLURM_JOB_NAME}"
+NEW_DIR="/expanse/lustre/scratch/${USER}/temp_project/castep/${SLURM_JOB_NAME}_energyconv_${SLURM_JOB_ID}"
+DATA="/home/${USER}/project/${SLURM_JOB_NAME}/"
 
 # Create the new directory
 mkdir -p "$NEW_DIR"
-if ((! -d ${DATA} )); then 
-    mkdir ${DATA}
-fi
+[ -d ${DATA} ] || mkdir ${DATA}
 
 # Load necessary modules
 module reset
@@ -32,7 +30,6 @@ module load openblas
 #cp -R /home/${USER}/CASTEP-23.1/bin/linux_x86_64_gfortran10--mpi/ /expanse/lustre/scratch/${USER}/temp_project/CASTEP_23.1
 
 export PATH="/expanse/lustre/scratch/${USER}/temp_project/CASTEP_23.1:$PATH"
-# Copy the VASP input files to the new directory
 cp ${SLURM_JOB_NAME}* "$NEW_DIR"/ # change to your current working directory
 cp ${SLURM_JOB_NAME}* ${DATA}
 

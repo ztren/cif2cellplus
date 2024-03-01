@@ -12,7 +12,7 @@
 #SBATCH --export=ALL
 
 # Create new scratch directory and add a variable for the new directory name
-NEW_DIR="/expanse/lustre/scratch/${USER}/temp_project/castep/${SLURM_JOB_NAME}_${SLURM_JOB_ID}"
+NEW_DIR="/expanse/lustre/scratch/${USER}/temp_project/castep/${SLURM_JOB_NAME}_kpointconv_${SLURM_JOB_ID}"
 DATA="/home/${USER}/project/${SLURM_JOB_NAME}/"
 
 # Create the new directory
@@ -30,7 +30,6 @@ module load openblas
 #cp -R /home/${USER}/CASTEP-23.1/bin/linux_x86_64_gfortran10--mpi/ /expanse/lustre/scratch/${USER}/temp_project/CASTEP_23.1
 
 export PATH="/expanse/lustre/scratch/${USER}/temp_project/CASTEP_23.1:$PATH"
-# Copy the VASP input files to the new directory
 cp ${SLURM_JOB_NAME}* "$NEW_DIR"/ # change to your current working directory
 cp ${SLURM_JOB_NAME}* ${DATA}
 
@@ -40,13 +39,24 @@ cd "$NEW_DIR"
 # Disable OpenMP multi-threading
 export OMP_NUM_THREADS=1
 
-#run castep script
-mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
+# for i in {02..10..1} # ?Uncomment if cut off energy convergence required. Tests cut off energy from 200eV to 1000eV.
+for i in {10..04..-2} # !Uncomment if k-point convergence required. Tests k-point spacing from 0.10 to 0.04. k-point spacing for 0.02 will take a lot of computing power.
+do
+    # sed -i 's/\w00 eV/'$i'00 eV/' ${SLURM_JOB_NAME}.param # ?Uncomment if cut off energy convergence required
+    sed -i 's/kpoints_mp_spacing : 0.\w\w/kpoints_mp_spacing : 0.'$i'/' ${SLURM_JOB_NAME}.cell  # !Uncomment if k-point convergence required
+    mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
+    # mpirun castep.mpi ${SLURM_JOB_NAME}
+    rm ${SLURM_JOB_NAME}.check
+    rm ${SLURM_JOB_NAME}.castep_bin
+    rm ${SLURM_JOB_NAME}.cst_esp
+    rm ${SLURM_JOB_NAME}.b*
+    rm ${SLURM_JOB_NAME}.magres
+    rm *.usp
+done
 
 # Optional: Post-processing steps, if required
-cp ${SLURM_JOB_NAME}.check ${DATA}
-cp ${SLURM_JOB_NAME}.cst_esp ${DATA}
-cp ${SLURM_JOB_NAME}.castep* ${DATA}
+# cp ${SLURM_JOB_NAME}.check ${DATA} # May take hundreds of MB of space, not recommended for convergence test.
+cp ${SLURM_JOB_NAME}.castep ${DATA}
 cp ${SLURM_JOB_NAME}-out.cif ${DATA}
 cp ${SLURM_JOB_NAME}.magres ${DATA}
 
