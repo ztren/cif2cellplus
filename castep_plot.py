@@ -21,7 +21,7 @@ while i < n:
     temp = raw.iloc[i:i+L,0:3]
     temp.insert(3, "iso", temp.loc[:,"siso"].astype(float))
     avg = temp.groupby("Species")["iso"].mean()
-    data.insert(count,count, avg)
+    data.insert(count,count, avg) # x axis is just from 0 to count. Have no plan to update it because we have series of convergence
     count = count + 1
     i = i + L + 2
 
