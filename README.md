@@ -18,8 +18,6 @@ Data processing script for large amount of cif files for CASTEP calculation.
 ## castep_plot.py
 plots convergence curves from .castep file directly. Must be used with `castep_read.sh` downloaded in the same folder.
 
-## Examples
-2 cif files are given in the `./examples/` folder. copy and paste it to `./cifs/` folder and run the `cif2cellplus.py`.
 ## Developing
 Batch editing from geo-opt to NMR.\
 A script that runs all the generated main_job.sh.
