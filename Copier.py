@@ -4,7 +4,7 @@ import shutil
 ncount = 0
 count = 0
 
-for root, dirs, files in os.walk('source'):
+for root, dirs, files in os.walk('source'): # Change the source as needed
     for file in files:
         if file[-4:].lower() == ".mpr":
             try:
