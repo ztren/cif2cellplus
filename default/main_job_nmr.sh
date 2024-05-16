@@ -37,6 +37,11 @@ cp ${SLURM_JOB_NAME}* ${DATA}
 # Move to the new directory
 cd "$NEW_DIR"
 
+# Uncomment NMR, Comment GeoOpt
+sed -i '0,/task : geometryoptimisation/s//#task : geometryoptimisation/' ${SLURM_JOB_NAME}.param
+sed -i '0,/#task : magres/s//task : magres/' ${SLURM_JOB_NAME}.param
+sed -i '0,/#magres_task : NMR/s//magres_task : NMR/' ${SLURM_JOB_NAME}.param
+
 # Disable OpenMP multi-threading
 export OMP_NUM_THREADS=1
 

@@ -22,7 +22,7 @@ while i < n:
     temp = raw.iloc[i:i+L,0:4] # index, Species, Ion, sCq, sAsym
     temp.insert(4, "Cq", temp.loc[:,"sCq"].astype(float))
     temp.insert(5, "Asym", temp.loc[:,"sAsym"].astype(float))
-    avg = temp.groupby("Species")["Cq"].mean()
+    avg = temp.groupby("Species")["Cq"].mean().abs()
     avgAsym = temp.groupby("Species")["Asym"].mean()
     data.insert(count,count, avg) # x axis is just from 0 to count. Have no plan to update it because we have series of convergence
     dataAsym.insert(count,count, avgAsym)
@@ -31,6 +31,7 @@ while i < n:
 
 data = data.T
 dataAsym = dataAsym.T
+data.to_csv('Cq.csv', index=False) 
 plt.figure()
 data.plot()
 plt.savefig('plotCq.png')
