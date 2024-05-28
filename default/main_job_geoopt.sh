@@ -46,6 +46,18 @@ sed -i '0,/magres_task : NMR/s//#magres_task : NMR/' ${SLURM_JOB_NAME}.param
 export OMP_NUM_THREADS=1
 
 #run castep script
+sed -i 's/GEOM_MAX_ITER        : \w\w\w/GEOM_MAX_ITER        : 004/' *.param
+mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
+mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
+mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
+mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
+mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
+mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
+sed -i 's/GEOM_MAX_ITER        : \w\w\w/GEOM_MAX_ITER        : 010/' *.param
+mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
+mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
+mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
+sed -i 's/GEOM_MAX_ITER        : \w\w\w/GEOM_MAX_ITER        : 200/' *.param
 mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
 
 # Optional: Post-processing steps, if required
