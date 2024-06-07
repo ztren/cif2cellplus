@@ -48,17 +48,20 @@ export OMP_NUM_THREADS=1
 #run castep script - GeoOpt
 counter=0
 sed -i 's/GEOM_MAX_ITER        : \w\w\w/GEOM_MAX_ITER        : 004/' *.param
-while ! grep -q 'LBFGS: Geometry optimization completed successfully.'  ${SLURM_JOB_NAME}.castep
-do
-    mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
+while ! grep -q 'LBFGS: Geometry optimization completed successfully.'  ${SLURM_JOB_NAME}.castep ; do
+    if ! mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME} ; then
+    break
+    fi
     counter=$(( $counter + 1 ))
-    if [ $counter -eq 6 ] 
-    then
+    if [ $counter -eq 6 ] ; then
         sed -i 's/GEOM_MAX_ITER        : \w\w\w/GEOM_MAX_ITER        : 010/' *.param
     else 
-        if [ $counter -eq 10 ] 
-        then
+        if [ $counter -eq 10 ] ; then
             sed -i 's/GEOM_MAX_ITER        : \w\w\w/GEOM_MAX_ITER        : 200/' *.param
+        else
+            if [ $counter -eq 12 ] ; then
+                break
+            fi
         fi
     fi
 done
