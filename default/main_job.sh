@@ -29,8 +29,8 @@ module load openblas
 # module load castep # CASTEP is NOT installed on sdsc expanse. Used local castep mpi instead. 
 #cp -R /home/${USER}/CASTEP-23.1/bin/linux_x86_64_gfortran10--mpi/ /expanse/lustre/scratch/${USER}/temp_project/CASTEP_23.1
 
-export PATH="/expanse/lustre/scratch/${USER}/temp_project/CASTEP_23.1:$PATH"
-# Copy the VASP input files to the new directory
+export PATH="/expanse/lustre/scratch/${USER}/temp_project/CASTEP_23.1/linux_x86_64_gfortran10--mpi/:$PATH"
+# Copy the CASTEP input files to the new directory
 cp ${SLURM_JOB_NAME}* "$NEW_DIR"/ # change to your current working directory
 cp ${SLURM_JOB_NAME}* ${DATA}
 
@@ -38,27 +38,40 @@ cp ${SLURM_JOB_NAME}* ${DATA}
 cd "$NEW_DIR"
 
 # Uncomment GeoOpt, Comment NMR
-sed -i '0,/#task : geometryoptimisation/s//task : geometryoptimisation/' ${SLURM_JOB_NAME}.param
+sed -i ':a;s/#task : geometryoptimisation/task : geometryoptimisation/g;ta' ${SLURM_JOB_NAME}.param
 sed -i '0,/task : magres/s//#task : magres/' ${SLURM_JOB_NAME}.param
 sed -i '0,/magres_task : NMR/s//#magres_task : NMR/' ${SLURM_JOB_NAME}.param
 
 # Disable OpenMP multi-threading
 export OMP_NUM_THREADS=1
 
-#run castep script
+#run castep script - GeoOpt
+counter=0
 sed -i 's/GEOM_MAX_ITER        : \w\w\w/GEOM_MAX_ITER        : 004/' *.param
-mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
-mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
-mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
-mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
-mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
-mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
-sed -i 's/GEOM_MAX_ITER        : \w\w\w/GEOM_MAX_ITER        : 010/' *.param
-mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
-mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
-mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
-sed -i 's/GEOM_MAX_ITER        : \w\w\w/GEOM_MAX_ITER        : 200/' *.param
-mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
+while ! grep -q 'LBFGS: Geometry optimization completed successfully.'  ${SLURM_JOB_NAME}.castep
+do
+    mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
+    counter=$(( $counter + 1 ))
+    if [ $counter -eq 6 ] 
+    then
+        sed -i 's/GEOM_MAX_ITER        : \w\w\w/GEOM_MAX_ITER        : 010/' *.param
+    else 
+        if [ $counter -eq 10 ] 
+        then
+            sed -i 's/GEOM_MAX_ITER        : \w\w\w/GEOM_MAX_ITER        : 200/' *.param
+        fi
+    fi
+done
+
+#run castep script - NMR
+if grep -q 'LBFGS: Geometry optimization completed successfully.'  ${SLURM_JOB_NAME}.castep
+then
+    sed -i '0,/task : geometryoptimisation/s//#task : geometryoptimisation/' ${SLURM_JOB_NAME}.param
+    sed -i ':a;s/#task : magres/task : magres/g;ta' ${SLURM_JOB_NAME}.param
+    sed -i ':a;s/#magres_task : NMR/magres_task : NMR/g;ta' ${SLURM_JOB_NAME}.param
+    mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
+fi
+
 
 # Optional: Post-processing steps, if required
 cp ${SLURM_JOB_NAME}.check ${DATA}

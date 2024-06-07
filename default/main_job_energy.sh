@@ -29,7 +29,7 @@ module load openblas
 # module load castep # CASTEP is NOT installed on sdsc expanse. Used local castep mpi instead. 
 #cp -R /home/${USER}/CASTEP-23.1/bin/linux_x86_64_gfortran10--mpi/ /expanse/lustre/scratch/${USER}/temp_project/CASTEP_23.1
 
-export PATH="/expanse/lustre/scratch/${USER}/temp_project/CASTEP_23.1:$PATH"
+export PATH="/expanse/lustre/scratch/${USER}/temp_project/CASTEP_23.1/linux_x86_64_gfortran10--mpi/:$PATH"
 cp ${SLURM_JOB_NAME}* "$NEW_DIR"/ # change to your current working directory
 cp ${SLURM_JOB_NAME}* ${DATA}
 
