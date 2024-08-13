@@ -10,6 +10,7 @@
 #SBATCH --constraint="lustre"
 #SBATCH --account= #YOUR_ACCOUNT
 #SBATCH --export=ALL
+#SBATCH --signal=B:USR1@180
 
 # Create new scratch directory and add a variable for the new directory name
 NEW_DIR="/expanse/lustre/scratch/${USER}/temp_project/castep/${SLURM_JOB_NAME}_${SLURM_JOB_ID}"
@@ -37,6 +38,18 @@ cp ${SLURM_JOB_NAME}* ${DATA}
 # Move to the new directory
 cd "$NEW_DIR"
 
+# Data Backup Function
+data_backup()
+{
+    echo Time out in 180 seconds. Backing up at `date`
+    cp ${SLURM_JOB_NAME}.check ${DATA}
+    cp ${SLURM_JOB_NAME}.cst_esp ${DATA}
+    cp ${SLURM_JOB_NAME}.castep* ${DATA}
+    cp ${SLURM_JOB_NAME}-out.cif ${DATA}
+    cp ${SLURM_JOB_NAME}.magres ${DATA}
+}
+trap 'data_backup' USR1
+
 # Uncomment GeoOpt, Comment NMR
 sed -i ':a;s/#task : geometryoptimisation/task : geometryoptimisation/g;ta' ${SLURM_JOB_NAME}.param
 sed -i '0,/task : magres/s//#task : magres/' ${SLURM_JOB_NAME}.param
@@ -49,9 +62,12 @@ export OMP_NUM_THREADS=1
 counter=0
 sed -i 's/GEOM_MAX_ITER        : \w\w\w/GEOM_MAX_ITER        : 004/' *.param
 while ! grep -q 'LBFGS: Geometry optimization completed successfully.'  ${SLURM_JOB_NAME}.castep ; do
+    echo loop $(( $counter + 1 )) starts at `date`
     if ! mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME} ; then
-    break
-    fi
+        echo CASTEP runtime error at `date`
+        break
+    fi &
+    wait
     counter=$(( $counter + 1 ))
     if [ $counter -eq 6 ] ; then
         sed -i 's/GEOM_MAX_ITER        : \w\w\w/GEOM_MAX_ITER        : 010/' *.param
@@ -69,10 +85,14 @@ done
 #run castep script - NMR
 if grep -q 'LBFGS: Geometry optimization completed successfully.'  ${SLURM_JOB_NAME}.castep
 then
+    echo GeoOpt finished. NMR calculation starts at `date`
     sed -i '0,/task : geometryoptimisation/s//#task : geometryoptimisation/' ${SLURM_JOB_NAME}.param
     sed -i ':a;s/#task : magres/task : magres/g;ta' ${SLURM_JOB_NAME}.param
     sed -i ':a;s/#magres_task : NMR/magres_task : NMR/g;ta' ${SLURM_JOB_NAME}.param
     mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
+    echo NMR calculation finished at `date`
+else
+    echo WARNING: GeoOpt may not be finished. NMR calculation NOT starting `date`
 fi
 
 
