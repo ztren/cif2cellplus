@@ -25,11 +25,11 @@ module load cpu/0.15.4
 module load gcc
 module load openmpi
 module load fftw
-module load openblas
+module load intel-mkl
 # module load castep # CASTEP is NOT installed on sdsc expanse. Used local castep mpi instead. 
-#cp -R /home/${USER}/CASTEP-23.1/bin/linux_x86_64_gfortran10--mpi/ /expanse/lustre/scratch/${USER}/temp_project/CASTEP_23.1
+#cp -R /home/${USER}/CASTEP-24.1/bin/linux_x86_64_gfortran10--mpi/ /expanse/lustre/scratch/${USER}/temp_project/CASTEP_24.1
 
-export PATH="/expanse/lustre/scratch/${USER}/temp_project/CASTEP_23.1/linux_x86_64_gfortran10--mpi/:$PATH"
+export PATH="/expanse/lustre/scratch/${USER}/temp_project/CASTEP_24.1/linux_x86_64_gfortran10--mpi/:$PATH"
 cp ${SLURM_JOB_NAME}* "$NEW_DIR"/ # change to your current working directory
 cp ${SLURM_JOB_NAME}* ${DATA}
 
@@ -50,7 +50,7 @@ do
     WARPY=`echo "scale=7; ${MAXIMUM_WARPY} / 25 * $i" | bc -l` 
     WARPZ=`echo "scale=7; ${MAXIMUM_WARPZ} / 25 * $i" | bc -l` 
     sed -i 's/'${ELEMENT}'   0.\w\w\w\w\w\w\w0\+   0.\w\w\w\w\w\w\w0\+   0.\w\w\w\w\w\w\w0\+/'${ELEMENT}'   0'${WARPX}'00000000   0'${WARPY}'00000000   0'${WARPZ}'00000000/' ${SLURM_JOB_NAME}.cell
-    mpirun -np 24 --bind-to core --map-by ppr:24:node:pe=thds -x OMP_NUM_THREADS castep.mpi ${SLURM_JOB_NAME}
+    mpirun -np 24 castep.mpi ${SLURM_JOB_NAME}
     # mpirun castep.mpi ${SLURM_JOB_NAME}
     rm ${SLURM_JOB_NAME}.check
     rm ${SLURM_JOB_NAME}.castep_bin
