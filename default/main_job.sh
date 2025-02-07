@@ -63,6 +63,9 @@ counter=0
 sed -i 's/GEOM_MAX_ITER        : \w\w\w/GEOM_MAX_ITER        : 004/' *.param
 while ! grep -q 'LBFGS: Geometry optimization completed successfully.'  ${SLURM_JOB_NAME}.castep ; do
     echo loop $(( $counter + 1 )) starts at `date`
+    SEED=`shuf -i 1-100000000 -n 1`
+    sed -i '0,/RAND_SEED = .*/s//RAND_SEED = '$SEED'/' *.param
+    echo Random Seed for this loop is $SEED
     if ! mpirun -np 24 castep.mpi ${SLURM_JOB_NAME} ; then
         echo CASTEP runtime error at `date`
         break

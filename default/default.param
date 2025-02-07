@@ -40,3 +40,5 @@ BS_EIGENVALUE_TOL    : 0.000000001
 
 #write_cell_structure = TRUE
 write_cif_structure = TRUE
+
+RAND_SEED = 0
