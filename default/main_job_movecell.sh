@@ -8,7 +8,7 @@
 #SBATCH -J #DONT_MODIFY_THIS
 #SBATCH -p shared
 #SBATCH --constraint="lustre"
-#SBATCH --account= # Your Account Here
+#SBATCH --account= #MODIFY_THIS
 #SBATCH --export=ALL
 
 # Create new scratch directory and add a variable for the new directory name
@@ -29,7 +29,7 @@ module load intel-mkl
 # module load castep # CASTEP is NOT installed on sdsc expanse. Used local castep mpi instead. 
 #cp -R /home/${USER}/CASTEP-24.1/bin/linux_x86_64_gfortran10--mpi/ /expanse/lustre/scratch/${USER}/temp_project/CASTEP_24.1
 
-export PATH="/expanse/lustre/scratch/${USER}/temp_project/CASTEP_24.1/linux_x86_64_gfortran10--mpi/:$PATH"
+export PATH="/expanse/lustre/scratch/${USER}/temp_project/CASTEP_25.1/linux_x86_64_gfortran10--mpi/:$PATH"
 cp ${SLURM_JOB_NAME}* "$NEW_DIR"/ # change to your current working directory
 cp ${SLURM_JOB_NAME}* ${DATA}
 
